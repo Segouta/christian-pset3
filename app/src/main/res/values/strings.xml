@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">christian-pset3</string>
+    <string name="title_home">Menu</string>
+    <string name="title_order">Your order</string>
+    <string name="edit">Edit</string>
+    <string name="order_now">Order now!</string>
+
+</resources>
