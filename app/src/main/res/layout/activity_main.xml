@@ -29,6 +29,7 @@
                 android:layout_marginBottom="8dp"
                 android:layout_marginStart="28dp"
                 android:layout_marginTop="8dp"
+                android:onClick="editButtonClick"
                 android:text="Edit"
                 android:textColor="@color/colorAccent"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -37,6 +38,7 @@
 
             <TextView
                 android:id="@+id/orderButton"
+                android:onClick="addToOrderClick"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="8dp"
