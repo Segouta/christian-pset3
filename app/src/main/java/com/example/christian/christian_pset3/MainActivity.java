@@ -33,9 +33,11 @@ public class MainActivity extends AppCompatActivity {
     ListView listView;
     List<String> menuGroups = new ArrayList<String>();
     List<String> payArray = new ArrayList<String>();
+    List<Integer> amountArray = new ArrayList<Integer>();
     TextView mTxtDisplay;
     ArrayAdapter theAdapter;
     String[] orderArray = {"", ""};
+
     long selected;
 
 
@@ -86,9 +88,12 @@ public class MainActivity extends AppCompatActivity {
                         switchCase(orderArray[0]);
                     return true;
                 case R.id.navigation_notifications:
+                    String itemPicked = "Hold item to edit it!";
+                    Toast.makeText(MainActivity.this, itemPicked, Toast.LENGTH_SHORT).show();
+                    listView.setOnItemClickListener(null);
                     menuGroups.clear();
-                    for (int i = 0; i < payArray.size(); i++){
-                        menuGroups.add(payArray.get(i).toString());
+                    for (int i = 0; i < payArray.size(); i++) {
+                        menuGroups.add(payArray.get(i) + " (" + amountArray.get(i) + ")");
                     }
                     theAdapter.notifyDataSetChanged();
                     titleView.setText("Your order");
@@ -141,7 +146,6 @@ public class MainActivity extends AppCompatActivity {
 
 
     }
-
 
     public void categories(final String category) {
 
@@ -236,41 +240,79 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-
-
     public void editButtonClick(View view) {
         if (editButton.getText().equals("< back")) {
             layer_depth -= 1;
             switchCase(orderArray[0]);
         }
         else if (editButton.getText().equals("Delete this!")) {
-            System.out.println("a" + payArray);
-            System.out.println("sel" + selected);
-            payArray.remove((int) selected);
-            System.out.println("b" + payArray);
+
+            amountArray.set((int) selected, amountArray.get((int) selected) - 1);
+            if (amountArray.get((int) selected) == 0){
+                payArray.remove((int) selected);
+                amountArray.remove((int) selected);
+
+
+            }
             menuGroups.clear();
             for (int i = 0; i < payArray.size(); i++){
-                menuGroups.add(payArray.get(i).toString());
+                menuGroups.add(payArray.get(i) + " (" + amountArray.get(i) + ")");
             }
             theAdapter.notifyDataSetChanged();
+            editButton.setVisibility(View.INVISIBLE);
+
+            orderButton.setText("Order now!");
         }
 
     }
 
     public void addToOrderClick(View view) {
+        System.out.println(amountArray.toString());
         if (orderButton.getText().equals("Add to order")) {
-//            if (payArray.contains(titleView.getText().toString())) {
-//                int index = payArray.indexOf(titleView.getText().toString());
-//                payArray.
-//            }
-            payArray.add(titleView.getText().toString());
+            int index;
+            boolean found = false;
+            for (int i = 0; i < payArray.size(); i++){
+                if (payArray.get(i).startsWith(titleView.getText().toString())) {
+                    index = i;
+                    amountArray.set(index, amountArray.get(i) + 1);
+                    found = true;
+                }
+            }
+            if (!found) {
+                payArray.add(titleView.getText().toString());
+                amountArray.add(1);
+            }
+
             layer_depth = 0;
             String itemPicked = "Added " + titleView.getText().toString() + " to order!";
             Toast.makeText(MainActivity.this, itemPicked, Toast.LENGTH_SHORT).show();
             switchCase("");
+
+
+        }
+        else if (orderButton.getText().equals("Add one of this!")){
+            amountArray.set((int) selected, amountArray.get((int) selected) + 1);
+            String temp;
+            if (payArray.get((int) selected).endsWith(")"))
+                temp = payArray.get((int) selected).substring(0, payArray.get((int) selected).length() - 4);
+            else
+                temp = payArray.get((int) selected);
+            editButton.setVisibility(View.INVISIBLE);
+            orderButton.setText("Order now!");
+            menuGroups.clear();
+            for (int i = 0; i < payArray.size(); i++){
+                menuGroups.add(payArray.get(i) + " (" + amountArray.get(i) + ")");
+            }
+            theAdapter.notifyDataSetChanged();
+
         }
         else if (orderButton.getText().equals("Order now!")) {
 //            REQUEST VOOR WAIT TIME
+        }
+
+        menuGroups.clear();
+        for (int i = 0; i < payArray.size(); i++){
+            menuGroups.add(payArray.get(i) + " (" + amountArray.get(i) + ")");
         }
     }
 
