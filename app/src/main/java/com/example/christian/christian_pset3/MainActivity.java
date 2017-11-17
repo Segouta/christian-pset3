@@ -380,9 +380,17 @@
             editButton.setVisibility(View.VISIBLE);
             editButton.setText("No, back!");
             orderButton.setText("Yes, prep meal!");
+
         }
         else if (orderButton.getText().equals("Yes, prep meal!")) {
             waitTime();
+
+            menuGroups.clear();
+            payArray.clear();
+            priceArray.clear();
+            amountArray.clear();
+            System.out.println(payArray.toString() + priceArray.toString() + amountArray.toString());
+            saveToSharedPrefs();
         }
 
         menuGroups.clear();
@@ -422,6 +430,7 @@
                             payArray.clear();
                             priceArray.clear();
                             amountArray.clear();
+
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
@@ -554,7 +563,7 @@
         String received1 = prefs.getString("key1", null);
         if(received1 != null) {
             String convert1 = received1.substring(1,  received1.length() - 1);
-            List<String> myList1 = new ArrayList<String>(Arrays.asList(convert1.split(",")));
+            List<String> myList1 = new ArrayList<String>(Arrays.asList(convert1.split(", ")));
             List<String>myList1string = new ArrayList<String>();
             for(String s : myList1) {
                 System.out.println("dit " + s);
@@ -568,7 +577,7 @@
         String received2 = prefs.getString("key2", null);
         if(received2 != null) {
             String convert2 = received2.substring(1,  received2.length() - 1);
-            List<String> myList2 = new ArrayList<String>(Arrays.asList(convert2.split(",")));
+            List<String> myList2 = new ArrayList<String>(Arrays.asList(convert2.split(", ")));
             List<Integer>myList2int = new ArrayList<Integer>();
 
             for(String s : myList2) {
@@ -583,7 +592,7 @@
         String received3 = prefs.getString("key3", null);
         if(received3 != null) {
             String convert3 = received3.substring(1,  received3.length() - 1);
-            List<String> myList3 = new ArrayList<String>(Arrays.asList(convert3.split(",")));
+            List<String> myList3 = new ArrayList<String>(Arrays.asList(convert3.split(", ")));
             List<Float>myList3float = new ArrayList<Float>();
             for(String s : myList3) {
                 System.out.println("dit " + s);
