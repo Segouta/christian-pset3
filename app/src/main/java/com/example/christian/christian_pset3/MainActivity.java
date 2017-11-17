@@ -6,6 +6,7 @@
         import android.support.annotation.NonNull;
         import android.support.design.widget.BottomNavigationView;
         import android.support.v7.app.AppCompatActivity;
+        import android.util.Log;
         import android.view.MenuItem;
         import android.view.View;
         import android.widget.AdapterView;
@@ -29,6 +30,7 @@
         import org.json.JSONObject;
 
         import java.util.ArrayList;
+        import java.util.Arrays;
         import java.util.HashSet;
         import java.util.List;
         import java.util.Set;
@@ -47,6 +49,9 @@
     ImageView imageView;
     String path = "";
     String path2 = "";
+    String payList = "";
+    String priceList = "";
+    String amountList = "";
     long selected;
 
 
@@ -333,10 +338,11 @@
                 }
             }
             if (!found) {
+                System.out.println("HIIIIEEEER: " + payArray.toString());
                 payArray.add(titleView.getText().toString());
                 amountArray.add(1);
                 priceArray.add(Float.valueOf(priceText.getText().toString().substring(2, priceText.getText().toString().length())));
-                System.out.println(priceArray.toString());
+
             }
 
             layer_depth = 0;
@@ -527,23 +533,29 @@
         SharedPreferences prefs = this.getSharedPreferences("settings", this.MODE_PRIVATE);
         SharedPreferences.Editor editor = prefs.edit();
 
-//        Set<String> payList = new HashSet<String>(payArray);
-//        editor.putStringSet("key1", payList);
-//
+        payList = payArray.toString();
+        editor.putString("key1", payList);
+        System.out.println("hier: " + payList);
+
+//        String priceList
 //        Set<String> priceList = new HashSet<String>(priceArray);
 //        editor.putStringSet("key2", priceList);
 //
 //        Set<String> amountList = new HashSet<String>(amountArray);
 //        editor.putStringSet("key3", amountList);
-//
-//        editor.commit();
+
+        editor.commit();
 
     }
 
     public void loadFromSharedPrefs() {
         SharedPreferences prefs = this.getSharedPreferences("settings", this.MODE_PRIVATE);
 
-//        payArray.addAll(prefs.getStringSet("key1", payList));
+//        String received = prefs.getString("key1", payList);
+//        String[] convert = received.substring(1,  received.length() - 1).split(", ");
+//        payArray = Arrays.asList(convert);
+//        System.out.println("hierdan: " + payList);
+
 
     }
 }
