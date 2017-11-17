@@ -46,6 +46,7 @@
     ArrayAdapter theAdapter;
     ImageView imageView;
     String path = "";
+    String path2 = "";
     long selected;
 
 
@@ -55,7 +56,7 @@
 
         setContentView(R.layout.activity_main);
 
-//        loadFromSharedPrefs();
+        loadFromSharedPrefs();
 
         imageView = findViewById(R.id.imageView);
         titleView = findViewById(R.id.titleView);
@@ -96,7 +97,10 @@
                     titleView.setText("Menu");
                     editButton.setVisibility(View.INVISIBLE);
                     orderButton.setVisibility(View.INVISIBLE);
-                    switchCase(path);
+                    if (layer_depth == 2)
+                        switchCase(path2);
+                    else
+                        switchCase(path);
                     return true;
                 case R.id.navigation_notifications:
                     yourOrder();
@@ -122,6 +126,11 @@
         titleView.setText("Your order");
         editButton.setVisibility(View.INVISIBLE);
         orderButton.setVisibility(View.VISIBLE);
+        if (payArray.size() == 0) {
+            orderButton.setVisibility(View.INVISIBLE);
+            descText.setVisibility(View.VISIBLE);
+            descText.setText("No orders here yet!");
+        }
         orderButton.setText("Order now!");
     }
 
@@ -207,7 +216,7 @@
 
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        
+
                         mTxtDisplay.setText("Eroor");
 
                     }
@@ -285,14 +294,18 @@
             switchCase(path);
         }
         else if (editButton.getText().equals("Delete this!")) {
-
             amountArray.set((int) selected, amountArray.get((int) selected) - 1);
             if (amountArray.get((int) selected) == 0){
                 payArray.remove((int) selected);
                 amountArray.remove((int) selected);
                 priceArray.remove((int) selected);
 
-
+            }
+            orderButton.setVisibility(View.VISIBLE);
+            if (payArray.size() == 0) {
+                orderButton.setVisibility(View.INVISIBLE);
+                descText.setVisibility(View.VISIBLE);
+                descText.setText("No orders here yet!");
             }
             menuGroups.clear();
             for (int i = 0; i < payArray.size(); i++){
@@ -303,12 +316,13 @@
 
             orderButton.setText("Order now!");
         }
+        saveToSharedPrefs();
 
     }
 
     public void addToOrderClick(View view) {
 
-        if (orderButton.getText().equals("Add to order")) {
+            if (orderButton.getText().equals("Add to order")) {
             int index;
             boolean found = false;
             for (int i = 0; i < payArray.size(); i++){
@@ -368,15 +382,16 @@
         for (int i = 0; i < payArray.size(); i++){
             menuGroups.add(payArray.get(i) + " (" + amountArray.get(i) + "x)");
         }
+        saveToSharedPrefs();
     }
 
     public void waitTime() {
         RequestQueue queue = Volley.newRequestQueue(this);
-        System.out.println("HIER:" + payArray.toString());
+
         String url = "https://resto.mprog.nl/order";
 
         JSONObject to_send = new JSONObject();
-        System.out.println("Dit:" + payArray.toString());
+
         try {
             to_send.put("menuIds", payArray.get(0));
         } catch (JSONException e) {
@@ -390,7 +405,15 @@
                     public void onResponse(JSONObject response) {
 
                         try {
-                            descText.setText("Your estimated waiting time is " + response.getString("preparation_time") + " minutes... Sorry!");
+                            descText.setText("Your estimated waiting time is " + response.getString("preparation_time") + " minutes...");
+                            priceText.setText("Thanx for your order!");
+                            editButton.setVisibility(View.INVISIBLE);
+                            orderButton.setVisibility(View.INVISIBLE);
+                            titleView.setText("We're cookin'!");
+                            menuGroups.clear();
+                            payArray.clear();
+                            priceArray.clear();
+                            amountArray.clear();
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
@@ -401,7 +424,7 @@
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         // TODO Auto-generated method stub
-                        mTxtDisplay.setText("Eroor");
+                        mTxtDisplay.setText("Error");
 
                     }
                 });
@@ -461,6 +484,7 @@
                 categories(info);
                 break;
             case 2:
+                path2 = info;
                 editButton.setVisibility(View.VISIBLE);
                 editButton.setText("< back");
                 orderButton.setVisibility(View.VISIBLE);
@@ -498,25 +522,29 @@
         queue.add(imageRequest);
     }
 
-//    public void saveToSharedPrefs() {
-//
-//        SharedPreferences prefs = this.getSharedPreferences("settings", this.MODE_PRIVATE);
-//        SharedPreferences.Editor editor = prefs.edit();
-//
-//        Set<String> set = new HashSet<String>();
-//        set.addAll(payArray);
-//        editor.putStringSet("key", set);
-//        editor.commit();
-//
-//    }
-//
-//    public void loadFromSharedPrefs() {
-//        SharedPreferences prefs = this.getSharedPreferences("settings", this.MODE_PRIVATE);
-//
-//        Set<String> set = myScores.getStringSet("key", null);
-//
-//
-//    }
+    public void saveToSharedPrefs() {
 
+        SharedPreferences prefs = this.getSharedPreferences("settings", this.MODE_PRIVATE);
+        SharedPreferences.Editor editor = prefs.edit();
+
+//        Set<String> payList = new HashSet<String>(payArray);
+//        editor.putStringSet("key1", payList);
+//
+//        Set<String> priceList = new HashSet<String>(priceArray);
+//        editor.putStringSet("key2", priceList);
+//
+//        Set<String> amountList = new HashSet<String>(amountArray);
+//        editor.putStringSet("key3", amountList);
+//
+//        editor.commit();
+
+    }
+
+    public void loadFromSharedPrefs() {
+        SharedPreferences prefs = this.getSharedPreferences("settings", this.MODE_PRIVATE);
+
+//        payArray.addAll(prefs.getStringSet("key1", payList));
+
+    }
 }
 
