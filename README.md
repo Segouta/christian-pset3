@@ -1,3 +1,14 @@
+### Welcome to the Restaurant app!
+This app allows a user to order in a restaurant from their own phones!!
+
+By:               Christian
+
+Student number:   11930683
+
+Date:             17-11-2017
+
+Subject:          Native App Studio UvA
+
 This is a restaurant app.
 
 This whole app is constructed out of one single activity, which was an ambitious decision.
