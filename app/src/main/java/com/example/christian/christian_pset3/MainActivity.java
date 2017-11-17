@@ -61,6 +61,7 @@
 
         setContentView(R.layout.activity_main);
 
+//        saveToSharedPrefs();
         loadFromSharedPrefs();
 
         imageView = findViewById(R.id.imageView);
@@ -385,6 +386,7 @@
         }
 
         menuGroups.clear();
+        System.out.println("pretty" + payArray.toString() + amountArray.toString() + priceArray.toString());
         for (int i = 0; i < payArray.size(); i++){
             menuGroups.add(payArray.get(i) + " (" + amountArray.get(i) + "x)");
         }
@@ -535,14 +537,12 @@
 
         payList = payArray.toString();
         editor.putString("key1", payList);
-        System.out.println("hier: " + payList);
 
-//        String priceList
-//        Set<String> priceList = new HashSet<String>(priceArray);
-//        editor.putStringSet("key2", priceList);
-//
-//        Set<String> amountList = new HashSet<String>(amountArray);
-//        editor.putStringSet("key3", amountList);
+        amountList = amountArray.toString();
+        editor.putString("key2", amountList);
+
+        priceList = priceArray.toString();
+        editor.putString("key3", priceList);
 
         editor.commit();
 
@@ -551,11 +551,48 @@
     public void loadFromSharedPrefs() {
         SharedPreferences prefs = this.getSharedPreferences("settings", this.MODE_PRIVATE);
 
-//        String received = prefs.getString("key1", payList);
-//        String[] convert = received.substring(1,  received.length() - 1).split(", ");
-//        payArray = Arrays.asList(convert);
-//        System.out.println("hierdan: " + payList);
+        String received1 = prefs.getString("key1", null);
+        if(received1 != null) {
+            String convert1 = received1.substring(1,  received1.length() - 1);
+            List<String> myList1 = new ArrayList<String>(Arrays.asList(convert1.split(",")));
+            List<String>myList1string = new ArrayList<String>();
+            for(String s : myList1) {
+                System.out.println("dit " + s);
+                if (s.length() > 0)
+                    myList1string.add(s);
+            }
+            System.out.println(myList1.toString());
+            payArray = myList1string;
+        }
 
+        String received2 = prefs.getString("key2", null);
+        if(received2 != null) {
+            String convert2 = received2.substring(1,  received2.length() - 1);
+            List<String> myList2 = new ArrayList<String>(Arrays.asList(convert2.split(",")));
+            List<Integer>myList2int = new ArrayList<Integer>();
+
+            for(String s : myList2) {
+                System.out.println("dits " + s);
+                if (s.length() > 0)
+                    myList2int.add(Integer.valueOf(s));
+            }
+            System.out.println(myList2.toString());
+            amountArray = myList2int;
+        }
+
+        String received3 = prefs.getString("key3", null);
+        if(received3 != null) {
+            String convert3 = received3.substring(1,  received3.length() - 1);
+            List<String> myList3 = new ArrayList<String>(Arrays.asList(convert3.split(",")));
+            List<Float>myList3float = new ArrayList<Float>();
+            for(String s : myList3) {
+                System.out.println("dit " + s);
+                if (s.length() > 0)
+                    myList3float.add(Float.valueOf(s));
+            }
+            System.out.println(myList3.toString());
+            priceArray = myList3float;
+        }
 
     }
 }
