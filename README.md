@@ -9,7 +9,7 @@ Date:             17-11-2017
 
 Subject:          Native App Studio UvA
 
-This is a restaurant app.
+##
 
 This whole app is constructed out of one single activity, which was an ambitious decision.
 
